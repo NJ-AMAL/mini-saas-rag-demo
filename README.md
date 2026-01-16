@@ -1,87 +1,87 @@
-Mini SaaS – Multi-Client RAG Demo
+Mini SaaS – Démo RAG Multi-Client
 =================================
 
-This is a mini SaaS application simulating a multi-client RAG system. 
-Each client has their own document space and can only query their own documents. 
-Answers are strictly limited to the client’s documents.
+Ceci est une mini-application SaaS simulant un système RAG multi-client.  
+Chaque client possède son propre espace de documents et ne peut interroger que ses propres documents.  
+Les réponses sont strictement limitées aux documents du client.
 
 ------------------------------------------------------------
 1. Backend
 ------------------------------------------------------------
 
-Requirements:
+Prérequis :
 - Python 3.12+
-- Install dependencies:
+- Installer les dépendances :
 
     pip install -r requirements.txt
 
-Start the backend:
+Démarrer le backend :
 
     uvicorn app:app --reload
 
-The backend will run on http://127.0.0.1:8000
+Le backend sera accessible sur http://127.0.0.1:8000
 
 ------------------------------------------------------------
 2. Frontend (Streamlit)
 ------------------------------------------------------------
 
-Start the Streamlit interface:
+Démarrer l’interface Streamlit :
 
     streamlit run ui.py
 
-The frontend will open in your browser. You can enter your API key 
-and ask questions about your documents.
+Le frontend s’ouvrira dans votre navigateur.  
+Vous pourrez entrer votre clé API et poser des questions sur vos documents.
 
 ------------------------------------------------------------
-3. API Keys (for testing)
+3. Clés API (pour tests)
 ------------------------------------------------------------
 
-Client   | API Key
+Client   | Clé API
 ---------|---------
 clientA  | tenantA_key
 clientB  | tenantB_key
 
-> Use the "API Key" field in the Streamlit UI. This simulates the `X-API-KEY` header.
+> Utilisez le champ "API Key" dans l’interface Streamlit. Cela simule l’en-tête `X-API-KEY`.
 
 ------------------------------------------------------------
-4. Testing per client
+4. Tests par client
 ------------------------------------------------------------
 
-1. Enter the API Key for the client.
-2. Ask a question.
-3. The system will return answers **only from that client’s documents**.
-4. Trying a client key on the other client’s documents will return a 404 error.
+1. Saisir la clé API du client.
+2. Poser une question.
+3. Le système renverra des réponses **uniquement à partir des documents de ce client**.
+4. Essayer une clé client sur les documents d’un autre client renverra une erreur 404.
 
 ------------------------------------------------------------
 5. Notes
 ------------------------------------------------------------
 
-- The backend uses **FAISS + SentenceTransformer** to embed and search documents.
-- Answers are directly retrieved from documents — no external LLM is used.
-- If a client has no documents or the query matches nothing, the system returns an appropriate message.
+- Le backend utilise **FAISS + SentenceTransformer** pour intégrer et rechercher dans les documents.
+- Les réponses sont directement extraites des documents — aucun LLM externe n’est utilisé.
+- Si un client n’a pas de documents ou si la requête ne correspond à rien, le système renvoie un message approprié.
 
 ------------------------------------------------------------
-6. Approach
+6. Méthodologie
 ------------------------------------------------------------
 
-1. **Client Separation**  
-   Each client is identified by an `X-API-KEY` header. The backend maps keys to clients and only accesses the client’s documents. This ensures strict multi-tenant separation.
+1. **Séparation des clients**  
+   Chaque client est identifié par un en-tête `X-API-KEY`. Le backend associe les clés aux clients et n’accède qu’aux documents du client. Cela garantit une séparation stricte entre locataires.
 
-2. **Document Retrieval**  
-   Each client’s documents are embedded using the `SentenceTransformer` model (`all-MiniLM-L6-v2`) and stored in a FAISS index.  
+2. **Récupération de documents**  
+   Les documents de chaque client sont intégrés à l’aide du modèle `SentenceTransformer` (`all-MiniLM-L6-v2`) et stockés dans un index FAISS.
 
-3. **Answer Generation**  
-   Queries are embedded and the top matching document is retrieved.  
-   > Answers are limited strictly to the client’s documents.  
+3. **Génération de réponses**  
+   Les requêtes sont intégrées et le document le plus pertinent est récupéré.  
+   > Les réponses sont strictement limitées aux documents du client.
 
 4. **Frontend**  
-   Streamlit is used for a simple UI. Users input their API key and question; results are returned instantly.  
+   Streamlit est utilisé pour une interface simple. Les utilisateurs saisissent leur clé API et leur question ; les résultats sont renvoyés instantanément.
 
-5. **No External LLM**  
-   To stay free, no OpenAI key is required. The system is fully offline, producing answers strictly from documents.
+5. **Pas de LLM externe**  
+   Pour rester gratuit, aucune clé OpenAI n’est nécessaire. Le système fonctionne entièrement hors ligne, produisant des réponses strictement à partir des documents.
 
 ------------------------------------------------------------
-Folder Structure
+Structure des dossiers
 ------------------------------------------------------------
 
 TestPython/
