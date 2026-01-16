@@ -1,8 +1,0 @@
-fastapi==0.111.0
-uvicorn==0.25.0
-streamlit==1.26.0
-requests==2.32.2
-faiss-cpu==1.13.2
-sentence-transformers==2.2.2
-huggingface_hub==0.13.4
-numpy
